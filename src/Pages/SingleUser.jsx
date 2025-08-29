@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 export default function SingleUser() {
   const val = useParams();
-  console.log(val);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
   const [load, setLoad] = useState(false);
   const [err, setErr] = useState(false);
 
@@ -19,8 +19,7 @@ export default function SingleUser() {
     try {
       setLoad(true);
       const data = await getData();
-      console.log(data.data);
-      setUser(data.data);
+      setUser(data);
       setLoad(false);
     } catch (error) {
       setErr(true);
@@ -28,15 +27,18 @@ export default function SingleUser() {
       console.log(error);
     }
   };
+
   useEffect(() => {
     fetchandGetUser();
   }, []);
+
   if (load) {
     return <h1>Loading...</h1>;
   }
   if (err) {
     return <h1>Something went wrong...</h1>;
   }
+
   return (
     <div>
       <div
@@ -45,10 +47,10 @@ export default function SingleUser() {
       >
         <img src={user?.data?.avatar} style={{ width: "300px" }} alt="" />
         <h3>
-          Name:{user?.data?.first_name} {user?.data?.last_name}
+          Name: {user?.data?.first_name} {user?.data?.last_name}
         </h3>
-        <h4>id:{user?.data?.id}</h4>
-        <h5>Email:{user?.data?.email}</h5>
+        <h4>id: {user?.data?.id}</h4>
+        <h5>Email: {user?.data?.email}</h5>
         <hr />
         <img src="" alt="" />
         <h4>Body: {user?.support?.text}</h4>
